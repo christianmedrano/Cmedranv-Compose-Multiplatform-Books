@@ -40,6 +40,10 @@ import org.koin.compose.viewmodel.koinViewModel
 import coil3.compose.LocalPlatformContext
 import coil3.network.NetworkHeaders
 import coil3.network.httpHeaders
+import kotlinx.serialization.Serializable
+
+@Serializable
+object HomeScreen
 
 @Composable
 fun HomeScreen(

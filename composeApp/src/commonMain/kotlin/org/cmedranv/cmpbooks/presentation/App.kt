@@ -5,12 +5,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import org.jetbrains.compose.ui.tooling.preview.Preview
-
+import androidx.navigation.toRoute
 import org.cmedranv.cmpbooks.di.initKoin
 import org.cmedranv.cmpbooks.presentation.detail.BookDetailScreen
 import org.cmedranv.cmpbooks.presentation.home.HomeScreen
@@ -35,30 +35,26 @@ fun App() {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
             val navController = rememberNavController()
 
-            NavHost(navController = navController, startDestination = Routes.LOGIN) {
-                composable(Routes.LOGIN) {
+            NavHost(navController = navController, startDestination = LoginScreen) {
+                composable<LoginScreen> {
                     LoginScreen(
                         onLoginSuccess = {
-                            navController.navigate(Routes.HOME) {
-                                popUpTo(Routes.LOGIN) { inclusive = true }
-                            }
+                            navController.navigate(HomeScreen)
                         }
                     )
                 }
-                composable(Routes.HOME) {
+                composable<HomeScreen> {
                     HomeScreen(
                         onBookClick = { bookId ->
-                            navController.navigate("${Routes.BOOK_DETAIL}/${bookId}")
+                            navController.navigate(BookDetailScreen(bookId))
                         }
                     )
                 }
-                composable(
-                    Routes.BOOK_DETAIL,
-                    arguments = listOf(navArgument("bookId") { type = androidx.navigation.NavType.StringType }) // <<-- MODIFICACIÓN AQUÍ
-                ) { backStackEntry ->
-                    //val bookId: String? = backStackEntry.arguments?.getString("bookId")
+                composable<BookDetailScreen> { backStackEntry ->
+                    val detail = backStackEntry.toRoute<BookDetailScreen>()
+
                     BookDetailScreen(
-                        bookId = "bookId",
+                        bookId = detail.bookId,
                         onBackClick = { navController.popBackStack() }
                     )
                 }

@@ -17,11 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.network.NetworkHeaders
+import coil3.network.httpHeaders
+import coil3.request.ImageRequest
+import kotlinx.serialization.Serializable
 import org.cmedranv.cmpbooks.presentation.common.AppTopBar
 import org.cmedranv.cmpbooks.presentation.common.ErrorMessage
 import org.cmedranv.cmpbooks.presentation.common.FullScreenLoading
+import org.cmedranv.cmpbooks.util.HtmlText
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
+
+@Serializable
+data class BookDetailScreen(val bookId: String)
 
 @Composable
 fun BookDetailScreen(
@@ -30,6 +39,8 @@ fun BookDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: BookDetailViewModel = koinViewModel(parameters = { parametersOf(bookId) })
 ) {
+    val context = LocalPlatformContext.current
+
     Scaffold(
         topBar = {
             AppTopBar(title = "Detalle del Libro", showBackButton = true, onBackClick = onBackClick)
@@ -65,7 +76,10 @@ fun BookDetailScreen(
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     book.description?.let {
-                        Text(text = it, style = MaterialTheme.typography.bodySmall)
+                        //val htmlDescription = getHtmlText(it)
+                        //Text(text = htmlDescription, style = MaterialTheme.typography.bodySmall)
+                        //HtmlText(html = it, style = MaterialTheme.typography.bodySmall)
+                        Text(text = HtmlText(it).getText(), style = MaterialTheme.typography.bodySmall)
                     }
                 }
             }
