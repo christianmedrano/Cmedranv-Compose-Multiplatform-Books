@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 kotlin {
@@ -45,6 +46,7 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
+            implementation(compose.materialIconsExtended)
             implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
@@ -72,7 +74,9 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
 
             // Carga de Imágenes (Coil)
-            implementation(libs.coil.compose) // AsyncImage Composable
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor3)
+            //implementation(libs.coil.singleton)
 
             // Navegación (Voyager)
             //implementation(libs.voyager.navigator)
